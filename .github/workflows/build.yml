@@ -35,12 +35,13 @@ jobs:
         uses: tecoli-com/actions-use-homebrew-tools@v0.4
         with:
           tools: 'llvm@13'
+          key: FOREVER
           cache: yes
       
       - name: Add LLVM to Path
         run: |
-          echo "/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1" >> $GITHUB_PATH;
-          ls "/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1"
+          echo "$HOME/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1" >> $GITHUB_PATH;
+          ls "$HOME/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1"
 
 
       - name: Install WebKit Binaries (Linux)
