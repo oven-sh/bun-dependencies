@@ -29,6 +29,11 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "13.0"
+
       - name: Install rust
         uses: hecrj/setup-rust-action@v1
         with:
