@@ -39,10 +39,11 @@ jobs:
       # The macOS-latest os includes LLVM by default.
       - name: Install LLVM (Linux)
         if: matrix.os == 'ubuntu-latest' && steps.cache-primes.outputs.cache-hit != 'true'
-        run: |
-          brew install llvm@13;
-          echo "${HOME}/linuxbrew/.linuxbrew/opt/llvm@13/bin" >> $GITHUB_PATH
+        run: brew install llvm@13;
 
+      # nasty lil bugger snuck past when we cache
+      - name: Add LLVM to Path
+        run: echo "${HOME}/linuxbrew/.linuxbrew/opt/llvm@13/bin" >> $GITHUB_PATH
 
       - name: Install WebKit Binaries (Linux)
         if: matrix.os == 'ubuntu-latest'
