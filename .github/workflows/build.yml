@@ -46,7 +46,9 @@ jobs:
 
       - name: Install WebKit Binaries (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: make extract-webkit-linux-binaries
+        run: |
+          ls "${HOME}/linuxbrew/.linuxbrew/opt/llvm@13/bin";
+          make extract-webkit-linux-binaries
 
       - name: Install rust
         uses: hecrj/setup-rust-action@v1
