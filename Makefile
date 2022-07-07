@@ -401,7 +401,6 @@ TINYCC_CFLAGS= -DTCC_LIBTCC1=\"\0\"
 
 tinycc:
 	cd $(TINYCC_DIR) && \
-		make clean && \
 		AR=$(AR) CC=$(CC) CFLAGS='$(CFLAGS) $(TINYCC_CFLAGS)' ./configure --enable-static --cc=$(CC) --ar=$(AR) --config-predefs=yes  && \
 		make -j10 && \
 		cp $(TINYCC_DIR)/*.a $(BUN_DEPS_OUT_DIR)
