@@ -40,7 +40,7 @@ jobs:
       
       - name: Add LLVM to Path
         run: |
-          echo "$HOME/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
+          echo "/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1" >> $GITHUB_PATH;
 
 
       - name: Install WebKit Binaries (Linux)
