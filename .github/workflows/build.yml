@@ -24,8 +24,10 @@ jobs:
       GH_ACTIONS: true
 
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v1
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Install rust
         uses: hecrj/setup-rust-action@v1
