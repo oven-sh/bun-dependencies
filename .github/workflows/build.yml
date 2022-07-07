@@ -37,6 +37,9 @@ jobs:
         run: |
           echo "/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
 
+      - name: Install Ninja
+        run: brew install ninja
+
       - name: Install WebKit Binaries (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: make extract-webkit-linux-binaries
