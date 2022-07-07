@@ -401,6 +401,7 @@ base64:
 		rm -rf src/base64/*.{o,ll,bc} && \
 	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BUN_CFLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
 	   $(CXX) $(EMIT_LLVM_FOR_RELEASE) $(CXXFLAGS) $(BUN_CFLAGS) -c neonbase64.cc -g -fPIC  && \
+		 cd $(REPO_ROOT) && \
 	   $(AR) rcvs $(BUN_DEPS_OUT_DIR)/libbase64.a ./*.o
 
 # Prevent dependency on libtcc1 so it doesn't do filesystem lookups
@@ -441,7 +442,7 @@ format:
 	$(PRETTIER) --write test/bun.js/solid-dom-fixtures/**/*.js
 
 lolhtml:
-	cd $(BUN_DEPS_DIR)/lol-html/ && cd $(BUN_DEPS_DIR)/lol-html/c-api && cargo build --release && cp target/release/liblolhtml.a $(BUN_DEPS_OUT_DIR)
+	cd $(BUN_DEPS_DIR)/lol-html/ && cd $(BUN_DEPS_DIR)/lol-html/c-api && cargo build --release && cd $(REPO_ROOT) && cp target/release/liblolhtml.a $(BUN_DEPS_OUT_DIR)
 
 boringssl-build:
 	cd $(BUN_DEPS_DIR)/boringssl && mkdir -p build && cd build && CFLAGS="$(CFLAGS)" cmake $(CMAKE_FLAGS) -GNinja .. && ninja 
@@ -463,6 +464,7 @@ libbacktrace:
 	cd $(BUN_DEPS_DIR)/libbacktrace && \
 	CFLAGS="$(CFLAGS)" CC=$(CC) ./configure --disable-shared --enable-static  --with-pic && \
 	make -j$(CPUS) && \
+	cd $(REPO_ROOT) && \
 	cp ./.libs/libbacktrace.a $(BUN_DEPS_OUT_DIR)/libbacktrace.a
 
 
@@ -492,6 +494,7 @@ vendor: require init-submodules vendor-without-check
 
 zlib: 
 	cd $(BUN_DEPS_DIR)/zlib; CFLAGS="$(CFLAGS)" cmake $(CMAKE_FLAGS) .; CFLAGS="$(CFLAGS)" make;
+	cd $(REPO_ROOT) && \
 	cp $(BUN_DEPS_DIR)/zlib/libz.a $(BUN_DEPS_OUT_DIR)/libz.a
 
 docker-login:
@@ -1142,6 +1145,7 @@ mimalloc:
 			-DCMAKE_C_FLAGS="$(CFLAGS)" \
 			 .\
 			&& make -j $(CPUS); 
+	cd $(REPO_ROOT) && \
 	cp $(BUN_DEPS_DIR)/mimalloc/$(MIMALLOC_INPUT_PATH) $(BUN_DEPS_OUT_DIR)/$(MIMALLOC_FILE)
 
 
