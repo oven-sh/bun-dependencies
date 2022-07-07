@@ -182,6 +182,7 @@ MIMALLOC_INPUT_PATH=$(_MIMALLOC_INPUT_PATH)
 endif
 
 
+llvm-install: echo "$(HOME)/linuxbrew/.linuxbrew/opt/llvm@13/bin" >> $(GITHUB_PATH)
 
 
 
