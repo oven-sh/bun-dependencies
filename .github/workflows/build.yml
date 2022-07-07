@@ -31,11 +31,11 @@ jobs:
 
       # The macOS-latest os includes LLVM by default.
       - name: Install LLVM (Linux)
-        if: ${{ matrix.os == ubuntu-latest }}
+        if: ${{ matrix.os == "ubuntu-latest" }}
         run: brew install llvm
 
       - name: Install WebKit Binaries (Linux)
-        if: ${{ matrix.os == ubuntu-latest }}
+        if: ${{ matrix.os == "ubuntu-latest" }}
         run: make extract-webkit-linux-binaries
 
       - name: Install rust
@@ -71,11 +71,9 @@ jobs:
         run: make base64
 
       - name: Commit files
-        if: ${{ matrix.os == ubuntu-latest }}
-        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        if: ${{ matrix.os == "ubuntu-latest" }}
+        uses: EndBug/add-and-commit@v9
         with:
-          # The arguments for the `git add` command (see the paragraph below for more info)
-          # Default: '.'
           add: 'deps/*.a deps/*.o'
           commit: --signoff
           message: 'chore(ci): build binaries'
