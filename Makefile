@@ -412,7 +412,6 @@ tinycc:
 	cd $(TINYCC_DIR) && \
 		AR=$(AR) CC=$(CC) CFLAGS='$(CFLAGS) $(TINYCC_CFLAGS)' ./configure --enable-static --cc=$(CC) --ar=$(AR) --config-predefs=yes  && \
 		make -j10 && \
-		cd $(REPO_ROOT) && \
 		cp $(TINYCC_DIR)/*.a $(BUN_DEPS_OUT_DIR)
 		
 generate-builtins:
