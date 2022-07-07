@@ -108,7 +108,7 @@ endif
 
 ifeq ($(OS_NAME),linux)
 LIBICONV_PATH = 
-AR=$(which llvm-ar-13 || which llvm-ar)
+AR=/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1/bin
 endif
 
 OPTIMIZATION_LEVEL=-O3 $(MARCH_NATIVE)
