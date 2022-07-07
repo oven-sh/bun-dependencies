@@ -46,8 +46,8 @@ jobs:
         with:
           rust-version: "1.62.0"
 
-      - name: tinycc
-        run: make tinycc
+      # - name: tinycc
+      #   run: make tinycc
       
       - name: lol-html
         run: make lolhtml
