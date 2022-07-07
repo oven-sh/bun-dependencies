@@ -36,6 +36,8 @@ jobs:
         with:
           tools: 'llvm@13'
           cache: yes
+      
+      - name: Add LLVM to Path
         run: echo "${HOME}/linuxbrew/.linuxbrew/opt/llvm@13/bin" >> $GITHUB_PATH
 
 
