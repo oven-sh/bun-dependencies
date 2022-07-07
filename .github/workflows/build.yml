@@ -32,7 +32,7 @@ jobs:
       # The macOS-latest os includes LLVM by default.
       - name: Install LLVM (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: brew install llvm@13
+        run: brew install --debug llvm@13
 
       - name: Install WebKit Binaries (Linux)
         if: matrix.os == 'ubuntu-latest'
