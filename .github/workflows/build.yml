@@ -36,6 +36,13 @@ jobs:
           brew install llvm@13;
           echo "${HOME}/linuxbrew/.linuxbrew/opt/llvm@13/bin" >> $GITHUB_PATH
 
+      - name: Cache LLVM
+        id: cache-llvm
+        uses: actions/cache@v3
+        with:
+          path: ${HOME}/linuxbrew/.linuxbrew/opt/llvm@13/bin
+          key: FOREVER
+
       - name: Install WebKit Binaries (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: make extract-webkit-linux-binaries
