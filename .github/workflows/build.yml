@@ -29,14 +29,9 @@ jobs:
         with:
           submodules: recursive
 
-      # The macOS-latest os includes LLVM by default.
       - name: Install LLVM (Linux)
         if: matrix.os == 'ubuntu-latest'
-        uses: tecoli-com/actions-use-homebrew-tools@v0.4
-        with:
-          tools: 'llvm@13'
-          key: FOREVER
-          cache: yes
+        run: brew install llvm@13
       
       - name: Add LLVM to Path
         run: |
