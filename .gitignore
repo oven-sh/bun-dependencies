@@ -1,2 +1,3 @@
 deps/*.a
 deps/*.o
+/bun-webkit

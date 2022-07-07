@@ -29,10 +29,14 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "13.0"
+      # The macOS-latest os includes LLVM by default.
+      - name: Install LLVM (Linux)
+        if: matrix.os == ubuntu-latest
+        run: brew install llvm
+
+      - name: Install WebKit Binaries (Linux)
+        if: matrix.os == ubuntu-latest
+        run: make extract-webkit-linux-binaries
 
       - name: Install rust
         uses: hecrj/setup-rust-action@v1
@@ -66,3 +70,12 @@ jobs:
       - name: base64
         run: make base64
 
+      - name: Commit files
+        if: matrix.os == ubuntu-latest
+        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          # The arguments for the `git add` command (see the paragraph below for more info)
+          # Default: '.'
+          add: 'deps/*.a deps/*.o'
+          commit: --signoff
+          message: 'chore(ci): build binaries'

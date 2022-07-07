@@ -46,7 +46,7 @@ BUN_BUILD_TAG = bun-v$(PACKAGE_JSON_VERSION)
 BUN_RELEASE_BIN = $(PACKAGE_DIR)/bun
 PRETTIER ?= $(shell which prettier || echo "./node_modules/.bin/prettier")
 DSYMUTIL ?= $(shell which dsymutil || which dsymutil-13)
-WEBKIT_DIR ?= $(realpath src/bun.js/WebKit)
+WEBKIT_DIR ?= $(realpath deps/WebKit)
 WEBKIT_RELEASE_DIR ?= $(WEBKIT_DIR)/WebKitBuild/Release
 WEBKIT_DEBUG_DIR ?= $(WEBKIT_DIR)/WebKitBuild/Debug
 WEBKIT_RELEASE_DIR_LTO ?= $(WEBKIT_DIR)/WebKitBuild/ReleaseLTO
@@ -386,6 +386,12 @@ BUN_LLD_FLAGS_DEBUG = $(BUN_LLD_FLAGS_WITHOUT_JSC) $(JSC_FILES_DEBUG) $(BINDINGS
 
 CLANG_VERSION = $(shell $(CC) --version | awk '/version/ {for(i=1; i<=NF; i++){if($$i=="version"){split($$(i+1),v,".");print v[1]}}}')
 
+extract-webkit-linux-binaries:
+	wget -c https://github.com/Jarred-Sumner/WebKit/releases/download/jul4/bun-webkit-linux-amd64.tar.gz -O - | tar -xz && \
+		make webkit-copy
+
+webkit-copy:
+	cp bun-webkit/lib/* $(BUN_DEPS_OUT_DIR)
 
 bun:
 
