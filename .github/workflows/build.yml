@@ -1,0 +1,67 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.kind }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        os: [macOS-latest, ubuntu-latest]
+
+    env:
+      GH_ACTIONS: true
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v1
+
+      - name: Set up Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: x64
+      
+      - name: Install rust
+        uses: hecrj/setup-rust-action@v1
+        with:
+          rust-version: "1.62.0"
+
+      - name: tinycc
+        run: make tinycc
+      
+      - name: lol-html
+        run: make lolhtml
+
+      - name: mimalloc
+        run: make mimalloc
+
+      - name: picohttp
+        run: make picohttp
+      
+      - name: zlib
+        run: make zlib
+
+      - name: boringssl
+        run: make boringssl
+      
+      - name: usockets
+        run: make usockets
+
+      - name: uws
+        run: make uws
+
+      - name: base64
+        run: make base64
+
