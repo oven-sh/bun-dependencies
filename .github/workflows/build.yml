@@ -33,7 +33,7 @@ jobs:
       - name: Install LLVM (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: brew install llvm@13; \
-             echo 'export PATH="$HOME/linuxbrew/.linuxbrew/opt/llvm@13/bin:$PATH"' >> $GITHUB_PATH
+             export GITHUB_PATH="$GITHUB_PATH;$HOME/linuxbrew/.linuxbrew/opt/llvm@13/bin:$PATH"
 
       - name: Install WebKit Binaries (Linux)
         if: matrix.os == 'ubuntu-latest'
