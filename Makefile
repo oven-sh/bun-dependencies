@@ -74,8 +74,9 @@ endif
 # macOS sed is different
 SED = $(shell which gsed || which sed)
 
+REPO_ROOT = $(shell pwd)
 BUN_DIR ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-BUN_DEPS_DIR = $(shell pwd)/deps
+BUN_DEPS_DIR = $(REPO_ROOT)/deps
 BUN_DEPS_OUT_DIR ?= $(BUN_DEPS_DIR)
 CPUS ?= $(shell nproc)
 USER ?= $(echo $USER)
@@ -409,6 +410,7 @@ tinycc:
 	cd $(TINYCC_DIR) && \
 		AR=$(AR) CC=$(CC) CFLAGS='$(CFLAGS) $(TINYCC_CFLAGS)' ./configure --enable-static --cc=$(CC) --ar=$(AR) --config-predefs=yes  && \
 		make -j10 && \
+		cd $(REPO_ROOT) && \
 		cp $(TINYCC_DIR)/*.a $(BUN_DEPS_OUT_DIR)
 		
 generate-builtins:
