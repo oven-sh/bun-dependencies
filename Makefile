@@ -108,7 +108,7 @@ endif
 
 ifeq ($(OS_NAME),linux)
 LIBICONV_PATH = 
-AR=llvm-ar-13
+AR=llvm-ar
 endif
 
 OPTIMIZATION_LEVEL=-O3 $(MARCH_NATIVE)
