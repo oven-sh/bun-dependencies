@@ -37,8 +37,8 @@ jobs:
         if: matrix.os == 'macOS-latest'
         run: |
           echo BREW_DEPS_DIR=/usr/local/Cellar >> $GITHUB_ENV;
-          echo CC=/usr/local/opt/llvm@13/bin/clang-13 >> $GITHUB_ENV;
-          echo CXX=/usr/local/opt/llvm@13/bin/clang-13++ >> $GITHUB_ENV
+          echo CC=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang >> $GITHUB_ENV;
+          echo CXX=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang++ >> $GITHUB_ENV
 
       - name: Cache dependencies
         id: cache
@@ -58,14 +58,6 @@ jobs:
 
       - name: Add LLVM to Path
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
-
-      - name: HACKME
-        if: matrix.os == 'macOS-latest'
-        run: |
-          echo $GITHUB_PATH;
-          ls $BREW_DEPS_DIR/llvm@13/13.0.1/bin;
-          ls usr/local/opt/llvm/bin;
-          ls usr/local/opt/llvm
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
