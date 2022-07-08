@@ -30,3 +30,6 @@ depth = 1
 [submodule "tinycc"]
 	path = deps/tinycc
 	url = https://github.com/Jarred-Sumner/tinycc.git
+[submodule "zig"]
+	path = deps/zig
+	url = https://github.com/Jarred-Sumner/zig
