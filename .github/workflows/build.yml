@@ -84,3 +84,4 @@ jobs:
           add: 'deps/*.a deps/*.o'
           commit: --signoff
           message: 'chore(ci): build binaries'
+          push: true
