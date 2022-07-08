@@ -25,19 +25,34 @@ jobs:
 
     steps:
       - name: Checkout repository and submodules
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /home/linuxbrew/.linuxbrew/Cellar/
+          key: cache-dependencies-all
+          restore-keys: cache-dependencies
+
+      - name: Link brew liraries
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: ./scripts/link-brew-libs.sh
+
       - name: Install LLVM (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: brew install llvm@13
-      
+        if: matrix.os == 'ubuntu-latest' && steps.cache.outputs.cache-hit != 'true'
+        run: |
+          brew install llvm@13
+
       - name: Add LLVM to Path
         run: |
           echo "/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
 
       - name: Install Ninja
+        if: matrix.os == 'ubuntu-latest' && steps.cache.outputs.cache-hit != 'true'
         run: brew install ninja
 
       - name: Install WebKit Binaries (Linux)
@@ -49,32 +64,8 @@ jobs:
         with:
           rust-version: "1.62.0"
 
-      - name: tinycc
-        run: make tinycc
-      
-      - name: lol-html
-        run: make lolhtml
-
-      - name: mimalloc
-        run: make mimalloc
-
-      - name: picohttp
-        run: make picohttp
-      
-      - name: zlib
-        run: make zlib
-
-      - name: boringssl
-        run: make boringssl
-      
-      - name: usockets
-        run: make usockets
-
-      - name: uws
-        run: make uws
-
-      - name: base64
-        run: make base64
+      - name: Make deps
+        run: ./scripts/make-deps.sh
 
       - name: Commit files
         if: matrix.os == 'ubuntu-latest'
