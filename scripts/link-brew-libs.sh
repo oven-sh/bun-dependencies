@@ -1,4 +1,4 @@
-for dir in /home/linuxbrew/.linuxbrew/Cellar/*/ ; do
+for dir in $BREW_DEPS_DIR/*/ ; do
     dir=${dir%*/}
     dir="${dir##*/}"
     
