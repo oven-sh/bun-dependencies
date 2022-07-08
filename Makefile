@@ -103,7 +103,7 @@ EMBED_OR_EMIT_BITCODE=
 LIBTOOL=libtoolize
 ifeq ($(OS_NAME),darwin)
 LIBTOOL=glibtoolize
-AR=$(LLVM_PREFIX)/bin/llvm-ar
+AR=/usr/local/Cellar/llvm@13/13.0.1/bin/llvm-ar
 BITCODE_OR_SECTIONS=-fembed-bitcode
 endif
 
