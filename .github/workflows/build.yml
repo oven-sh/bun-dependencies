@@ -63,7 +63,7 @@ jobs:
         if: matrix.os == 'macOS-latest'
         run: |
           echo $GITHUB_PATH;
-          ls ${{ $BREW_DEPS_DIR }}/llvm@13/13.0.1/bin;
+          ls $BREW_DEPS_DIR/llvm@13/13.0.1/bin;
           ls usr/local/opt/llvm/bin;
           ls usr/local/opt/llvm
 
