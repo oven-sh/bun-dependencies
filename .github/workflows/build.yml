@@ -82,7 +82,7 @@ jobs:
         with:
           new_branch: staged
           pathspec_error_handling: exitImmediately 
-          add: 'deps/*.a'
+          add: 'deps/*.o deps/*.a -f'
           commit: --signoff
           message: 'chore(ci): build binaries'
           push: --force
