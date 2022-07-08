@@ -35,7 +35,7 @@ jobs:
       
       - name: Set Environment Variables (MacOS)
         if: matrix.os == 'macOS-latest'
-        run: echo "BREW_DEPS_DIR=/usr/local/Cellar;CC=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang;CXX=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang++" >> $GITHUB_ENV
+        run: echo "BREW_DEPS_DIR=/usr/local/Cellar;CC=$(brew --prefix llvm@13)/bin/clang;CXX=$(brew --prefix llvm@13)/bin/clang++" >> $GITHUB_ENV
 
       - name: Cache dependencies
         id: cache
