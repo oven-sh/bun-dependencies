@@ -398,10 +398,15 @@ webkit-copy:
 
 bun:
 
+BASE64_FLAGS?=
+
+# TODO(sno2): conditionally build SIMD-compatible binaries
+BASE64_FLAGS=-march=x86-64-v3
+
 base64:
 	cd $(BUN_DEPS_DIR)/base64 && \
-	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BUN_CFLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
-	   $(CXX) $(EMIT_LLVM_FOR_RELEASE) $(CXXFLAGS) $(BUN_CFLAGS) -c neonbase64.cc -g -fPIC  && \
+	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BUN_CFLAGS) $(BASE64_FLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
+	   $(CXX) $(EMIT_LLVM_FOR_RELEASE) $(CXXFLAGS) $(BASE64_FLAGS) $(BUN_CFLAGS) -c neonbase64.cc -g -fPIC  && \
 	   $(AR) rcvs $(BUN_DEPS_OUT_DIR)/libbase64.a ./*.o
 
 # Prevent dependency on libtcc1 so it doesn't do filesystem lookups
@@ -588,13 +593,8 @@ usockets:
 	cd $(USOCKETS_DIR) && $(CXX) -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc $(EMIT_LLVM_FOR_RELEASE) $(MACOS_MIN_FLAG)  -fPIC $(CXXFLAGS) $(UWS_CXX_FLAGS) -save-temps -I$(BUN_DEPS_DIR)/uws/uSockets/src $(UWS_LDFLAGS) -g $(DEFAULT_LINKER_FLAGS) $(PLATFORM_LINKER_FLAGS) $(OPTIMIZATION_LEVEL) -g -c $(wildcard $(USOCKETS_SRC_DIR)/*.cpp) $(wildcard $(USOCKETS_SRC_DIR)/**/*.cpp)
 	cd $(USOCKETS_DIR) && $(AR) rcvs $(BUN_DEPS_OUT_DIR)/libusockets.a *.bc
 
-UWS_FLAGS?=
-
-# TODO(sno2): conditionally build SIMD-compatible binaries
-UWS_FLAGS=-march=x86-64-v3
-
 uws:
-	cd $(USOCKETS_DIR) && $(CXX) $(BITCODE_OR_SECTIONS) $(EMIT_LLVM_FOR_RELEASE) $(UWS_FLAGS) -fPIC -I$(BUN_DEPS_DIR)/uws/uSockets/src $(CLANG_FLAGS) $(CFLAGS) $(UWS_CXX_FLAGS) $(UWS_LDFLAGS) $(PLATFORM_LINKER_FLAGS) -c -I$(BUN_DEPS_DIR) $(BUN_DEPS_OUT_DIR)/libusockets.a $(BUN_DEPS_OUT_DIR)/libuwsockets.cpp -o $(BUN_DEPS_OUT_DIR)/libuwsockets.o
+	cd $(USOCKETS_DIR) && $(CXX) $(BITCODE_OR_SECTIONS) $(EMIT_LLVM_FOR_RELEASE) -fPIC -I$(BUN_DEPS_DIR)/uws/uSockets/src $(CLANG_FLAGS) $(CFLAGS) $(UWS_CXX_FLAGS) $(UWS_LDFLAGS) $(PLATFORM_LINKER_FLAGS) -c -I$(BUN_DEPS_DIR) $(BUN_DEPS_OUT_DIR)/libusockets.a $(BUN_DEPS_OUT_DIR)/libuwsockets.cpp -o $(BUN_DEPS_OUT_DIR)/libuwsockets.o
 
 sign-macos-x64: 
 	gon sign.macos-x64.json
