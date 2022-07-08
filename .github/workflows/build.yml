@@ -66,14 +66,3 @@ jobs:
 
       - name: Make deps
         run: ./scripts/make-deps.sh
-
-      - name: Commit files
-        if: matrix.os == 'ubuntu-latest'
-        uses: EndBug/add-and-commit@v9
-        with:
-          new_branch: staged
-          pathspec_error_handling: exitImmediately 
-          add: 'deps/*.o deps/*.a -f'
-          commit: --signoff
-          message: 'chore(ci): build binaries'
-          push: --force
