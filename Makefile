@@ -405,7 +405,7 @@ BASE64_FLAGS=-march=x86-64-v3
 
 base64:
 	cd $(BUN_DEPS_DIR)/base64 && \
-	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BUN_CFLAGS) $(BASE64_FLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
+	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BASE64_FLAGS) $(BUN_CFLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
 	   $(CXX) $(EMIT_LLVM_FOR_RELEASE) $(CXXFLAGS) $(BASE64_FLAGS) $(BUN_CFLAGS) -c neonbase64.cc -g -fPIC  && \
 	   $(AR) rcvs $(BUN_DEPS_OUT_DIR)/libbase64.a ./*.o
 
