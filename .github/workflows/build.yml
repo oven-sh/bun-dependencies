@@ -80,6 +80,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: EndBug/add-and-commit@v9
         with:
+          new_branch: staged
           pathspec_error_handling: exitImmediately 
           add: 'deps/*.a deps/*.o'
           commit: --signoff
