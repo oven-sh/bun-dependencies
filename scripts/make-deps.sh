@@ -1,4 +1,4 @@
-deps=("tinycc" "lolhtml" "minimalloc" "picohttp" "zlib" "boringssl" "usockets" "uws" "base64")
+deps=("tinycc" "lolhtml" "mimalloc" "picohttp" "zlib" "boringssl" "usockets" "uws" "base64")
 
 Red='\033[0;31m'
 Green='\033[0;32m'
