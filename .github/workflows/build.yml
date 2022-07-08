@@ -31,14 +31,14 @@ jobs:
 
       - name: Set Environment Variables (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: echo "BREW_DEPS_DIR='/home/linuxbrew/.linuxbrew/Cellar'" >> $GITHUB_ENV
+        run: echo BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar >> $GITHUB_ENV
       
       - name: Set Environment Variables (MacOS)
         if: matrix.os == 'macOS-latest'
         run: |
-          echo "BREW_DEPS_DIR='/usr/local/Cellar'" >> $GITHUB_ENV;
-          echo "CC='$(brew --prefix llvm@13)/bin/clang-13'" >> $GITHUB_ENV;
-          echo "CXX='$(brew --prefix llvm@13)/bin/clang++-13'" >> $GITHUB_ENV
+          echo BREW_DEPS_DIR=/usr/local/Cellar >> $GITHUB_ENV;
+          echo CC=${brew --prefix llvm@13}/bin/clang-13 >> $GITHUB_ENV;
+          echo CXX=${brew --prefix llvm@13}/bin/clang++-13' >> $GITHUB_ENV
 
       - name: Cache dependencies
         id: cache
