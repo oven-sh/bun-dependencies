@@ -8,9 +8,8 @@ BUN_AUTO_UPDATER_REPO = Jarred-Sumner/bun-releases-for-updater
 ifeq ($(ARCH_NAME_RAW),aarch64)
 ARCH_NAME_RAW = arm64
 endif
-
+#BREW_DEPS_DIR=SET BY GITHUB ACTIONS
 MARCH_NATIVE = -mtune=native
-
 ARCH_NAME :=
 DOCKER_BUILDARCH =
 ifeq ($(ARCH_NAME_RAW),arm64)
@@ -717,15 +716,15 @@ CLANG_FORMAT := $(shell command -v clang-format 2> /dev/null)
 
 
 jsc-bindings-headers: 
-	rm -f /tmp/build-jsc-headers src/bun.js/bindings/headers.zig
-	touch src/bun.js/bindings/headers.zig
-	mkdir -p src/bun.js/bindings-obj/
+	rm -f /tmp/build-jsc-headers deps/bindings/headers.zig
+	touch deps/bindings/headers.zig
+	mkdir -p deps/bindings-obj/
 	$(ZIG) build headers-obj
 	$(CXX) $(PLATFORM_LINKER_FLAGS) $(JSC_FILES_DEBUG) ${ICU_FLAGS} $(BUN_LLD_FLAGS_WITHOUT_JSC)  -g $(DEBUG_BIN)/headers.o -W -o /tmp/build-jsc-headers -lc;
 	/tmp/build-jsc-headers
-	$(ZIG) translate-c src/bun.js/bindings/headers.h > src/bun.js/bindings/headers.zig
+	$(ZIG) translate-c deps/bindings/headers.h > deps/bindings/headers.zig
 	$(BUN_OR_NODE) misctools/headers-cleaner.js
-	$(ZIG) fmt src/bun.js/bindings/headers.zig
+	$(ZIG) fmt deps/bindings/headers.zig
 
 
 MIMALLOC_OVERRIDE_FLAG ?= 
