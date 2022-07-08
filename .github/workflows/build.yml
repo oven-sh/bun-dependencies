@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macOS-latest]
 
     env:
       GH_ACTIONS: true
@@ -29,12 +29,19 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set Homebrew Installation Dir (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: echo "BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar" >> $GITHUB_ENV
+      
+      - name: Set Homebrew Installation Dir (MacOS)
+        if: matrix.os == 'macOS-latest'
+        run: echo "BREW_DEPS_DIR=/usr/local/Cellar" >> $GITHUB_ENV
+
       - name: Cache dependencies
         id: cache
         uses: actions/cache@v3
         with:
-          path: |
-            /home/linuxbrew/.linuxbrew/Cellar/
+          path: $BREW_DEPS_DIR
           key: cache-dependencies-all
           restore-keys: cache-dependencies
 
@@ -42,14 +49,12 @@ jobs:
         if: steps.cache.outputs.cache-hit == 'true'
         run: ./scripts/link-brew-libs.sh
 
-      - name: Install LLVM (Linux)
+      - name: Install LLVM
         if: matrix.os == 'ubuntu-latest' && steps.cache.outputs.cache-hit != 'true'
-        run: |
-          brew install llvm@13
+        run: brew install llvm@13
 
       - name: Add LLVM to Path
-        run: |
-          echo "/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
+        run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
 
       - name: Install Ninja
         if: matrix.os == 'ubuntu-latest' && steps.cache.outputs.cache-hit != 'true'
@@ -59,7 +64,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: make extract-webkit-linux-binaries
 
-      - name: Install rust
+      - name: Install Rust
         uses: hecrj/setup-rust-action@v1
         with:
           rust-version: "1.62.0"
