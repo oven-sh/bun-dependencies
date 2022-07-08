@@ -29,13 +29,13 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Set Homebrew Installation Dir (Linux)
+      - name: Set Environment Variables (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: echo "BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar" >> $GITHUB_ENV
       
-      - name: Set Homebrew Installation Dir (MacOS)
+      - name: Set Environment Variables (MacOS)
         if: matrix.os == 'macOS-latest'
-        run: echo "BREW_DEPS_DIR=/usr/local/Cellar" >> $GITHUB_ENV
+        run: echo "BREW_DEPS_DIR=/usr/local/Cellar;CC=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang;CXX=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang++" >> $GITHUB_ENV
 
       - name: Cache dependencies
         id: cache
