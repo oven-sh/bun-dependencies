@@ -56,6 +56,12 @@ jobs:
       - name: Add LLVM to Path
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
 
+      - name: HACKME
+        if: matrix.os == 'macOS-latest'
+        run: |
+          ls usr/local/opt/llvm/bin;
+          ls usr/local/opt/llvm
+
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install ninja
