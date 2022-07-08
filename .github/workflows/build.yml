@@ -59,6 +59,7 @@ jobs:
       - name: HACKME
         if: matrix.os == 'macOS-latest'
         run: |
+          ls $BREW_DEPS_DIR/llvm@13/13.0.1/bin;
           ls usr/local/opt/llvm/bin;
           ls usr/local/opt/llvm
 
