@@ -37,8 +37,8 @@ jobs:
         if: matrix.os == 'macOS-latest'
         run: |
           echo BREW_DEPS_DIR=/usr/local/Cellar >> $GITHUB_ENV;
-          echo CC=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang >> $GITHUB_ENV;
-          echo CXX=$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang++ >> $GITHUB_ENV
+          echo CC=/usr/local/Cellar/llvm@13/13.0.1/bin/clang >> $GITHUB_ENV;
+          echo CXX=/usr/local/Cellar/llvm@13/13.0.1/bin/clang++ >> $GITHUB_ENV
 
       - name: Cache dependencies
         id: cache
