@@ -53,7 +53,6 @@ WEBKIT_RELEASE_DIR_LTO ?= $(WEBKIT_DIR)/WebKitBuild/ReleaseLTO
 NPM_CLIENT ?= $(shell which bun || which npm)
 ZIG ?= $(shell which zig || echo -e "error: Missing zig. Please make sure zig is in PATH. Or set ZIG=/path/to-zig-executable")
 
-ifeq ($(OS_NAME),darwin)
 # We must use the same compiler version for the JavaScriptCore bindings and JavaScriptCore
 # If we don't do this, strange memory allocation failures occur.
 # This is easier to happen than you'd expect.
@@ -61,14 +60,13 @@ ifeq ($(OS_NAME),darwin)
 # so if that's resolved, it won't build for C++
 CC = $(shell which clang-13 || which clang)
 CXX = $(shell which clang++-13 || which clang++)
-endif
 
 ifeq ($(OS_NAME),darwin)
 LLVM_PREFIX ?= $(shell brew --prefix llvm)
 LDFLAGS += " -L$(LLVM_PREFIX)/lib"
 CPPFLAGS += " -I$(LLVM_PREFIX)/include"
-CC = $(LLVM_PREFIX)/bin/clang
-CXX = $(LLVM_PREFIX)/bin/clang++
+CC = $(LLVM_PREFIX)/bin/clang-13
+CXX = $(LLVM_PREFIX)/bin/clang-13++
 CODESIGN_IDENTITY ?= $(shell security find-identity -v -p codesigning | awk '/Apple Development/ { print $$2 }')
 endif
 
