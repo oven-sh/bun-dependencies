@@ -61,6 +61,8 @@ jobs:
 
       - name: Install Zig v0.10.0
         uses: goto-bus-stop/setup-zig@v1
+        with:
+          version: 0.10.0
 
       - name: Bootstrap Zig Fork
         run: |
