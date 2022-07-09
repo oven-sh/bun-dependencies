@@ -48,7 +48,7 @@ jobs:
           key: cache-dependencies-all
           restore-keys: cache-dependencies
 
-      - name: Link brew liraries
+      - name: Link brew libraries
         if: steps.cache.outputs.cache-hit == 'true'
         run: ./scripts/link-brew-libs.sh
 
@@ -58,6 +58,15 @@ jobs:
 
       - name: Add LLVM to Path
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
+
+      - name: Install Zig v0.10.0
+        uses: goto-bus-stop/setup-zig@v1
+
+      - name: Bootstrap Zig Fork
+        run: |
+          cd deps/zig;
+          zig build;
+          echo "$( pwd )/zig-out/zig" >> $GITHUB_PATH;
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
