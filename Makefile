@@ -398,7 +398,7 @@ webkit-copy:
 
 bun:
 
-BASE64_FLAGS=-march=x86-64-v3 -mtune=x86-64-v3
+BASE64_FLAGS=-march=x86-64-v3
 
 base64:
 	cd $(BUN_DEPS_DIR)/base64 && \
