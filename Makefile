@@ -23,7 +23,7 @@ else
 	DOCKER_BUILDARCH = amd64
 	BREW_PREFIX_PATH = /usr/local
 	MIN_MACOS_VERSION ?= 10.14
-	MARCH_NATIVE = -march=native -mtune=native
+	MARCH_NATIVE = -march=x86-64-v3 -mtune=native
 endif
 
 AR=
@@ -397,11 +397,6 @@ webkit-copy:
 	cp bun-webkit/lib/* $(BUN_DEPS_OUT_DIR)
 
 bun:
-
-BASE64_FLAGS?=
-
-# TODO(sno2): conditionally build SIMD-compatible binaries
-BASE64_FLAGS=-march=x86-64-v3
 
 base64:
 	cd $(BUN_DEPS_DIR)/base64 && \
