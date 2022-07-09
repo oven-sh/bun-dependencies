@@ -23,7 +23,7 @@ else
 	DOCKER_BUILDARCH = amd64
 	BREW_PREFIX_PATH = /usr/local
 	MIN_MACOS_VERSION ?= 10.14
-	MARCH_NATIVE = -march=x86-64-v3 -mtune=x86-64-v3
+	MARCH_NATIVE = -march=native -mtune=native
 endif
 
 AR=
@@ -398,10 +398,12 @@ webkit-copy:
 
 bun:
 
+BASE64_FLAGS=-march=x86-64-v3 -mtune=x86-64-v3
+
 base64:
 	cd $(BUN_DEPS_DIR)/base64 && \
-	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BASE64_FLAGS) $(BUN_CFLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
-	   $(CXX) $(EMIT_LLVM_FOR_RELEASE) $(CXXFLAGS) $(BASE64_FLAGS) $(BUN_CFLAGS) -c neonbase64.cc -g -fPIC  && \
+	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BUN_CFLAGS) $(OPTIMIZATION_LEVEL) $(BASE64_FLAGS) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
+	   $(CXX) $(EMIT_LLVM_FOR_RELEASE) $(CXXFLAGS) $(BUN_CFLAGS) $(BASE64_FLAGS) -c neonbase64.cc -g -fPIC  && \
 	   $(AR) rcvs $(BUN_DEPS_OUT_DIR)/libbase64.a ./*.o
 
 # Prevent dependency on libtcc1 so it doesn't do filesystem lookups
