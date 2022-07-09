@@ -23,7 +23,7 @@ else
 	DOCKER_BUILDARCH = amd64
 	BREW_PREFIX_PATH = /usr/local
 	MIN_MACOS_VERSION ?= 10.14
-	MARCH_NATIVE = -march=x86-64-v3 -mtune=native
+	MARCH_NATIVE = -march=x86-64-v3 -mtune=x86-64-v3
 endif
 
 AR=
