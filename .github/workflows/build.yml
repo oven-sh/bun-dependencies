@@ -59,16 +59,10 @@ jobs:
       - name: Add LLVM to Path
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
 
-      - name: Install Zig v0.10.0
+      - name: Install Zig
         uses: goto-bus-stop/setup-zig@v1
         with:
-          version: 0.10.0
-
-      - name: Bootstrap Zig Fork
-        run: |
-          cd deps/zig;
-          zig build;
-          echo "$( pwd )/zig-out/zig" >> $GITHUB_PATH;
+          version: 0.9.1
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
