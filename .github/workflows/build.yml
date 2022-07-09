@@ -64,6 +64,12 @@ jobs:
         with:
           version: 0.9.1
 
+      - name: Bootstrap Zig Fork
+        run: |
+          cd deps/zig;
+          zig build;
+          echo "$( pwd )/zig-out/zig" >> $GITHUB_PATH;
+
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install ninja
