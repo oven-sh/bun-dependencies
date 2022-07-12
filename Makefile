@@ -101,16 +101,20 @@ SQLITE_OBJECT =
 BITCODE_OR_SECTIONS=-fdata-sections -ffunction-sections
 EMBED_OR_EMIT_BITCODE=
 LIBTOOL=libtoolize
+
 ifeq ($(OS_NAME),darwin)
 LIBTOOL=glibtoolize
-AR=/usr/local/Cellar/llvm@13/13.0.1/bin/llvm-ar
+LLVM_PREFIX=/usr/local/Cellar/llvm@13/13.0.1
 BITCODE_OR_SECTIONS=-fembed-bitcode
 endif
 
 ifeq ($(OS_NAME),linux)
-LIBICONV_PATH = 
-AR=/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1/bin/llvm-ar
+LLVM_PREFIX=/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1
 endif
+
+AR=$(LLVM_PREFIX)/bin/llvm-ar
+LLVM_INCLUDE_DIRS=$(LLVM_PREFIX)/include
+CLANG_INCLUDE_DIRS=$(LLVM_PREFIX)/include
 
 OPTIMIZATION_LEVEL=-O3 $(MARCH_NATIVE)
 CFLAGS = $(MACOS_MIN_FLAG) $(MARCH_NATIVE) $(BITCODE_OR_SECTIONS) $(OPTIMIZATION_LEVEL) -fno-exceptions -fvisibility=hidden -fvisibility-inlines-hidden
