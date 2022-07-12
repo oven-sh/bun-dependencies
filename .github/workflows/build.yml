@@ -29,9 +29,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build Zig Fork
-        run: sudo ./scripts/build-zig-fork.sh
-
       - name: Set Environment Variables (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: echo BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar >> $GITHUB_ENV
@@ -61,6 +58,9 @@ jobs:
 
       - name: Add LLVM to Path
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH
+
+      - name: Build Zig Fork
+        run: sudo ./scripts/build-zig-fork.sh
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
