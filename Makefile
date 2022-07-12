@@ -396,6 +396,11 @@ extract-webkit-linux-binaries:
 webkit-copy:
 	cp bun-webkit/lib/* $(BUN_DEPS_OUT_DIR)
 
+zig-fork:
+	cd $(BUN_DEPS_DIR)/zig && \
+	cmake . -DCMAKE_PREFIX_PATH=$(brew --prefix llvm) -DZIG_STATIC_LLVM=on -DCMAKE_BUILD_TYPE=Release \
+	cp ./zigpp ../
+
 bun:
 
 BASE64_FLAGS=-march=x86-64-v3

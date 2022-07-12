@@ -60,7 +60,7 @@ jobs:
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH
 
       - name: Build Zig Fork
-        run: sudo ./scripts/build-zig-fork.sh
+        run: make zig-fork
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
