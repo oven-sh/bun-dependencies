@@ -76,7 +76,4 @@ jobs:
         run: ./scripts/make-deps.sh
 
       - name: Build Zig Fork
-        run: |
-          cd ./deps/zig;
-          cmake .;
-          cd ../../
+        run: ./scripts/build-zig-fork.sh
