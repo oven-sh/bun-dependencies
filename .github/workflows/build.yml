@@ -57,7 +57,7 @@ jobs:
         run: brew install llvm@13
 
       - name: Add LLVM to Path
-        run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH;
+        run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
@@ -74,3 +74,9 @@ jobs:
 
       - name: Make deps
         run: ./scripts/make-deps.sh
+
+      - name: Build Zig Fork
+        run: |
+          cd ./deps/zig;
+          cmake .;
+          cd ../../
