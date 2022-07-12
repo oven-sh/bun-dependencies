@@ -398,7 +398,7 @@ webkit-copy:
 
 zig-fork:
 	cd $(BUN_DEPS_DIR)/zig && \
-	cmake . -DCMAKE_PREFIX_PATH=$(brew --prefix llvm) -DZIG_STATIC_LLVM=on -DCMAKE_BUILD_TYPE=Release \
+	cmake . $(CMAKE_FLAGS) -DCMAKE_PREFIX_PATH=$(brew --prefix llvm) -DZIG_STATIC_LLVM=on \
 	cp ./zigpp ../
 
 bun:
