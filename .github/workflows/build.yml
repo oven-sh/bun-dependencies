@@ -29,6 +29,9 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Build Zig Fork
+        run: sudo ./scripts/build-zig-fork.sh
+
       - name: Set Environment Variables (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: echo BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar >> $GITHUB_ENV
@@ -74,6 +77,3 @@ jobs:
 
       - name: Make deps
         run: ./scripts/make-deps.sh
-
-      - name: Build Zig Fork
-        run: ./scripts/build-zig-fork.sh
