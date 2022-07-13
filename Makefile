@@ -404,11 +404,11 @@ webkit-copy:
 ZIG_FORK_SCRIPT=
 
 ifeq ($(OS_NAME), darwin)
-	ZIG_FORK_SCRIPT=./ci/azure/macos_script
+	ZIG_FORK_SCRIPT=./scripts/build-zig-macos
 endif
 
 ifeq ($(OS_NAME), linux)
-	ZIG_FORK_SCRIPT=./ci/azure/linux_script
+	ZIG_FORK_SCRIPT=404
 endif
 
 zig-fork:
