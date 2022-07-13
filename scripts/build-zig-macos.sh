@@ -1,6 +1,3 @@
-set -x
-set -e
-
 brew install ncurses s3cmd
 
 ZIGDIR="$(pwd)"
