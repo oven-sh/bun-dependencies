@@ -8,17 +8,12 @@ CACHE_BASENAME="zig+llvm+lld+clang-$TARGET-0.10.0-dev.2348+d43761808"
 PREFIX="$HOME/$CACHE_BASENAME"
 JOBS="-j2"
 
-rm -rf $PREFIX
-cd $HOME
-
 wget -nv "https://ziglang.org/deps/$CACHE_BASENAME.tar.xz"
 tar xf "$CACHE_BASENAME.tar.xz"
 
 ZIG="$PREFIX/bin/zig"
 export CC="$ZIG cc -target $TARGET -mcpu=$MCPU"
 export CXX="$ZIG c++ -target $TARGET -mcpu=$MCPU"
-
-cd $ZIGDIR
 
 # Make the `zig version` number consistent.
 # This will affect the cmake command below.
