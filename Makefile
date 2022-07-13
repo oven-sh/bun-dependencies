@@ -104,12 +104,12 @@ LIBTOOL=libtoolize
 
 ifeq ($(OS_NAME),darwin)
 LIBTOOL=glibtoolize
-LLVM_PREFIX=/usr/local/Cellar/llvm@13/13.0.1
+LLVM_PREFIX=$(BREW_DEPS_DIR)llvm@13/13.0.1
 BITCODE_OR_SECTIONS=-fembed-bitcode
 endif
 
 ifeq ($(OS_NAME),linux)
-LLVM_PREFIX=/home/linuxbrew/.linuxbrew/Cellar/llvm@13/13.0.1
+LLVM_PREFIX=$(BREW_DEPS_DIR)/llvm@13/13.0.1
 endif
 
 AR=$(LLVM_PREFIX)/bin/llvm-ar
@@ -404,17 +404,14 @@ webkit-copy:
 ZIG_FORK_SCRIPT=
 
 ifeq ($(OS_NAME), darwin)
-	ZIG_FORK_SCRIPT=../../scripts/build-zig-macos.sh
+	ZIG_FORK_SCRIPT=./scripts/build-zig-macos.sh
 endif
 
 ifeq ($(OS_NAME), linux)
 	ZIG_FORK_SCRIPT=404
 endif
 
-zig-fork:
-	cd $(BUN_DEPS_DIR)/zig && \
-	$(ZIG_FORK_SCRIPT) && \
-	ls
+zig-fork: $(ZIG_FORK_SCRIPT)
 
 bun:
 
