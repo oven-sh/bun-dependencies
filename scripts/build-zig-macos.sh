@@ -1,5 +1,3 @@
-brew install ncurses s3cmd
-
 ZIGDIR="$(pwd)"
 ARCH="x86_64"
 TARGET="$ARCH-macos-none"

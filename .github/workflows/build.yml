@@ -54,7 +54,7 @@ jobs:
 
       - name: Install LLVM
         if: steps.cache.outputs.cache-hit != 'true'
-        run: brew install llvm@13
+        run: brew install llvm@13 ncurses s3cmd
 
       - name: Add LLVM to Path
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH
