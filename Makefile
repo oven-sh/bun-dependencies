@@ -115,6 +115,7 @@ endif
 AR=$(LLVM_PREFIX)/bin/llvm-ar
 LLVM_INCLUDE_DIRS=$(LLVM_PREFIX)/include
 CLANG_INCLUDE_DIRS=$(LLVM_PREFIX)/include
+LLD_INCLUDE_DIRS=$(LLVM_PREFIX)/include
 
 OPTIMIZATION_LEVEL=-O3 $(MARCH_NATIVE)
 CFLAGS = $(MACOS_MIN_FLAG) $(MARCH_NATIVE) $(BITCODE_OR_SECTIONS) $(OPTIMIZATION_LEVEL) -fno-exceptions -fvisibility=hidden -fvisibility-inlines-hidden
@@ -402,8 +403,9 @@ webkit-copy:
 
 zig-fork:
 	cd $(BUN_DEPS_DIR)/zig && \
-	cmake . $(CMAKE_FLAGS) -DCMAKE_PREFIX_PATH=$(brew --prefix llvm) -DZIG_STATIC_LLVM=on \
-	cp ./zigpp ../
+	cmake . $(CMAKE_FLAGS) -DCMAKE_PREFIX_PATH=$(brew --prefix llvm) -DZIG_STATIC_LLVM=on -DCMAKE_BUILD_TYPE=Release \
+	ls && \
+	ls zigcpp
 
 bun:
 
