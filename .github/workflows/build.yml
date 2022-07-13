@@ -67,7 +67,7 @@ jobs:
 
       - name: Build Zig Fork
         if: matrix.os == 'macOS-latest'
-        run: make zig-fork
+        run: ./scripts/build-zig-macos.sh
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
