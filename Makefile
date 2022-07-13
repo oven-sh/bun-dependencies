@@ -414,7 +414,7 @@ endif
 zig-fork:
 	cd $(BUN_DEPS_DIR)/zig && \
 	$(ZIG_FORK_SCRIPT) && \
-	ls && \
+	ls
 
 bun:
 
