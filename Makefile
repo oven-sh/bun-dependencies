@@ -401,11 +401,20 @@ extract-webkit-linux-binaries:
 webkit-copy:
 	cp bun-webkit/lib/* $(BUN_DEPS_OUT_DIR)
 
+ZIG_FORK_SCRIPT=
+
+ifeq ($(OS_NAME), darwin)
+	ZIG_FORK_SCRIPT=./ci/azure/macos_script
+endif
+
+ifeq ($(OS_NAME), linux)
+	ZIG_FORK_SCRIPT=./ci/azure/linux_script
+endif
+
 zig-fork:
 	cd $(BUN_DEPS_DIR)/zig && \
-	cmake . $(CMAKE_FLAGS) -DCMAKE_PREFIX_PATH=$(brew --prefix llvm) -DZIG_STATIC_LLVM=on -DCMAKE_BUILD_TYPE=Release \
+	$(ZIG_FORK_SCRIPT) && \
 	ls && \
-	ls zigcpp
 
 bun:
 
