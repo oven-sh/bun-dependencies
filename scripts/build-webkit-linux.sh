@@ -1,17 +1,5 @@
 # TODO(sno2): add error checks after edgy commands
 
-if [ "$WEBKIT_DIR" == "" ] ; then
-	export WEBKIT_DIR=$(pwd)/deps/WebKit
-fi
-
-if ["$CC" == ""] ; then
-	export CC=$(which clang-13)
-fi
-
-if ["$CXX" == ""] ; then
-	export CXX=$(which clang++-13)
-fi
-
 printf $WEBKIT_DIR, "\n"
 
 cd $WEBKIT_DIR
