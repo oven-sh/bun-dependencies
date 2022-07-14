@@ -6,7 +6,7 @@ set_env () {
 	fi
 }
 
-local OS_NAME=$(uname -s | tr '[:upper:]' '[:lower:]')
+export OS_NAME=$(uname -s | tr '[:upper:]' '[:lower:]')
 
 if [ "$OS_NAME" == "linux" ] ; then
 	set_env "BREW_DEPS_DIR" "/home/linuxbrew/.linuxbrew/Cellar"
