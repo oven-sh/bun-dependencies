@@ -29,22 +29,8 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Set Common Environment Variables
-        run: |
-          echo WEBKIT_DIR=$(pwd)/deps/WebKit >> $GITHUB_ENV;
-          echo WEBKIT_RELEASE_TYPE=release >> $GITHUB_ENV
-
-      - name: Set Environment Variables (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          echo BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar >> $GITHUB_ENV
-
-      - name: Set Environment Variables (MacOS)
-        if: matrix.os == 'macOS-latest'
-        run: |
-          echo BREW_DEPS_DIR=/usr/local/Cellar >> $GITHUB_ENV;
-          echo CC=/usr/local/Cellar/llvm@13/13.0.1/bin/clang >> $GITHUB_ENV;
-          echo CXX=/usr/local/Cellar/llvm@13/13.0.1/bin/clang++ >> $GITHUB_ENV;
+      - name: Set Environment Variables
+        run: source ./scripts/setup-env.sh
 
       - name: Cache dependencies
         id: cache

@@ -1,4 +1,6 @@
-source ./scripts/setup-env.sh
+if [ "$GH_ACTIONS" != "true" ] ; then
+	source ./scripts/setup-env.sh
+fi
 
 # TODO(sno2): add error checks after edgy commands
 
