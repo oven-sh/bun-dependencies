@@ -1,6 +1,6 @@
-# TODO(sno2): add error checks after edgy commands
+source ./scripts/setup-env.sh
 
-printf $WEBKIT_DIR, "\n"
+# TODO(sno2): add error checks after edgy commands
 
 cd $WEBKIT_DIR
 
