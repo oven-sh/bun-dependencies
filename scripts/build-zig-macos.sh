@@ -1,4 +1,4 @@
-ZIGDIR="$(pwd)"
+ZIGDIR="$(sudo pwd)"
 ARCH="x86_64"
 TARGET="$ARCH-macos-none"
 MCPU="baseline"
@@ -6,8 +6,9 @@ CACHE_BASENAME="zig+llvm+lld+clang-$TARGET-0.10.0-dev.2348+d43761808"
 PREFIX="$HOME/$CACHE_BASENAME"
 JOBS="-j2"
 
-wget -nv "https://ziglang.org/deps/$CACHE_BASENAME.tar.xz"
-tar xf "$CACHE_BASENAME.tar.xz"
+# TODO: figure out what this is
+# wget -nv "https://ziglang.org/deps/$CACHE_BASENAME.tar.xz"
+# tar xf "$CACHE_BASENAME.tar.xz"
 
 ZIG="$PREFIX/bin/zig"
 export CC="$ZIG cc -target $TARGET -mcpu=$MCPU"

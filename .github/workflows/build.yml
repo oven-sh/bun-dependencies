@@ -29,16 +29,22 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set Common Environment Variables
+        run: |
+          echo WEBKIT_DIR=$(pwd)/deps/WebKit >> $GITHUB_ENV;
+          echo WEBKIT_RELEASE_TYPE=release >> $GITHUB_ENV
+
       - name: Set Environment Variables (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: echo BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar >> $GITHUB_ENV
-      
+        run: |
+          echo BREW_DEPS_DIR=/home/linuxbrew/.linuxbrew/Cellar >> $GITHUB_ENV
+
       - name: Set Environment Variables (MacOS)
         if: matrix.os == 'macOS-latest'
         run: |
           echo BREW_DEPS_DIR=/usr/local/Cellar >> $GITHUB_ENV;
           echo CC=/usr/local/Cellar/llvm@13/13.0.1/bin/clang >> $GITHUB_ENV;
-          echo CXX=/usr/local/Cellar/llvm@13/13.0.1/bin/clang++ >> $GITHUB_ENV
+          echo CXX=/usr/local/Cellar/llvm@13/13.0.1/bin/clang++ >> $GITHUB_ENV;
 
       - name: Cache dependencies
         id: cache
@@ -59,23 +65,28 @@ jobs:
       - name: Add LLVM to Path
         run: echo "$BREW_DEPS_DIR/llvm@13/13.0.1/bin" >> $GITHUB_PATH
 
-      - name: Install Zig v0.9.1
-        if: matrix.os == 'macOS-latest'
-        uses: goto-bus-stop/setup-zig@v1
-        with:
-          version: 0.9.1
+      # - name: Install Zig v0.9.1
+      #   if: matrix.os == 'macOS-latest'
+      #   uses: goto-bus-stop/setup-zig@v1
+      #   with:
+      #     version: 0.9.1
 
-      - name: Build Zig Fork
-        if: matrix.os == 'macOS-latest'
-        run: ./scripts/build-zig-macos.sh
+      # - name: Build Zig Fork
+      #   if: matrix.os == 'macOS-latest'
+      #   run: ./scripts/build-zig-macos.sh
 
       - name: Install Ninja
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install ninja
 
-      - name: Install WebKit Binaries (Linux)
+      # TODO(sno2): implement caching
+      - name: Install WebKit Dependencies (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: make extract-webkit-linux-binaries
+        run: sudo bash ./scripts/install-webkit-deps.sh
+
+      - name: Build WebKit (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo bash ./scripts/build-webkit-linux.sh
 
       - name: Install Rust
         uses: hecrj/setup-rust-action@v1
