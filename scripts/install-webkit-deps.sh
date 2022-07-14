@@ -45,6 +45,7 @@ apt-get install --no-install-recommends -y \
     python2 \
     rsync \
     ruby \
+    ninja-build \
     software-properties-common \
     unzip \
     wget
