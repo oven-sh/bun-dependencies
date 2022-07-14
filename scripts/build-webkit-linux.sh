@@ -17,4 +17,4 @@ cmake \
 CFLAGS="$CFLAGS -ffat-lto-objects"
 CXXFLAGS="$CXXFLAGS -ffat-lto-objects"
 
-cmake --build . --config $WEBKIT_RELEASE_TYPE -- "jsc" -j$(nproc)
+cmake --build . --config $WEBKIT_RELEASE_TYPE -- "jsc" -j$(nproc) .
