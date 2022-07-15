@@ -1,0 +1,35 @@
+[submodule "picohttpparser"]
+	path = deps/picohttpparser
+	url = https://github.com/h2o/picohttpparser.git
+ignore = dirty
+depth = 1
+[submodule "WebKit"]
+	path = deps/WebKit
+	url = https://github.com/Jarred-Sumner/WebKit.git
+[submodule "mimalloc"]
+	path = deps/mimalloc
+	url = https://github.com/Jarred-Sumner/mimalloc.git
+[submodule "zlib"]
+	path = deps/zlib
+	url = https://github.com/cloudflare/zlib.git
+[submodule "libarchive"]
+	path = deps/libarchive
+	url = https://github.com/libarchive/libarchive.git
+[submodule "boringssl"]
+	path = deps/boringssl
+	url = https://github.com/google/boringssl.git
+[submodule "libbacktrace"]
+	path = deps/libbacktrace
+	url = https://github.com/ianlancetaylor/libbacktrace
+[submodule "lol-html"]
+	path = deps/lol-html
+	url = https://github.com/cloudflare/lol-html
+[submodule "uws"]
+	path = deps/uws
+	url = https://github.com/Jarred-Sumner/uWebSockets
+[submodule "tinycc"]
+	path = deps/tinycc
+	url = https://github.com/Jarred-Sumner/tinycc.git
+[submodule "zig"]
+	path = deps/zig
+	url = https://github.com/Jarred-Sumner/zig

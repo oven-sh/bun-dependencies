@@ -1,0 +1,8 @@
+{
+  "author": "Jarred Sumner",
+  "name": "bun-dependencies",
+  "files": [
+    "/deps/*.a",
+    "/deps/*.o"
+  ]
+}

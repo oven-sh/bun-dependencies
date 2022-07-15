@@ -1,0 +1,88 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.kind }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+
+    env:
+      GH_ACTIONS: true
+
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set Environment Variables (1)
+        run: source ./scripts/setup-env.sh
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: $BREW_DEPS_DIR
+          key: cache-dependencies-all
+          restore-keys: cache-dependencies
+
+      - name: Link brew libraries
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: ./scripts/link-brew-libs.sh
+
+      - name: Install LLVM
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: brew install llvm@13 ncurses s3cmd
+      
+      # TODO(sno2): find a better way to do this to override old versions set
+      - name: Set Environment Variables (2)
+        run: source ./scripts/setup-env.sh
+
+      # - name: Install Zig v0.9.1
+      #   if: matrix.os == 'macOS-latest'
+      #   uses: goto-bus-stop/setup-zig@v1
+      #   with:
+      #     version: 0.9.1
+
+      # - name: Build Zig Fork
+      #   if: matrix.os == 'macOS-latest'
+      #   run: ./scripts/build-zig-macos.sh
+
+      - name: Install Ninja
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: brew install ninja
+
+      # TODO(sno2): implement caching
+      - name: Install WebKit Dependencies (linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo bash ./scripts/install-webkit-deps-linux.sh
+
+      - name: Build WebKit (linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo bash ./scripts/build-webkit-linux.sh
+
+      - name: Build WebKit (macOS)
+        if: matrix.os == 'macOS-latest'
+        run: sudo bash ./scripts/build-webkit-macos.sh
+
+      - name: Install Rust
+        uses: hecrj/setup-rust-action@v1
+        with:
+          rust-version: "1.62.0"
+
+      - name: Make deps
+        run: ./scripts/make-deps.sh

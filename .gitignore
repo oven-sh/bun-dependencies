@@ -1,0 +1,5 @@
+deps/*.a
+deps/*.o
+/bun-webkit
+zig-cache
+zig-out
