@@ -30,3 +30,4 @@ main () {
 	set_env AR "$LLVM_PREFIX_0/bin/llvm-ar"
 }
 
+main
