@@ -29,7 +29,7 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Set Environment Variables
+      - name: Set Environment Variables (1)
         run: source ./scripts/setup-env.sh
 
       - name: Cache dependencies
@@ -47,6 +47,10 @@ jobs:
       - name: Install LLVM
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install llvm@13 ncurses s3cmd
+      
+      # TODO(sno2): find a better way to do this to override old versions set
+      - name: Set Environment Variables (2)
+        run: source ./scripts/setup-env.sh
 
       # - name: Install Zig v0.9.1
       #   if: matrix.os == 'macOS-latest'
