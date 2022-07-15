@@ -6,18 +6,27 @@ set_env () {
 	fi
 }
 
-set_env OS_NAME $(uname -s | tr '[:upper:]' '[:lower:]')
+main () {
+	set_env OS_NAME $(uname -s | tr '[:upper:]' '[:lower:]')
 
-if [ "$OS_NAME" == "linux" ] ; then
-	set_env BREW_DEPS_DIR "/home/linuxbrew/.linuxbrew/Cellar"
-else
-	set_env BREW_DEPS_DIR "/usr/local/Cellar"
-fi
+	local BREW_DEPS_DIR_0=
+	
+	if [ "$OS_NAME" == "linux" ] ; then
+		BREW_DEPS_DIR_0="/home/linuxbrew/.linuxbrew/Cellar"
+	else
+		BREW_DEPS_DIR_0="/usr/local/Cellar"
+	fi
 
-set_env WEBKIT_DIR $(pwd)/deps/WebKit
-set_env WEBKIT_RELEASE_TYPE release
+	set_env BREW_DEPS_DIR=BREW_DEPS_DIR_0
 
-set_env LLVM_PREFIX "$BREW_DEPS_DIR/llvm@13/13.0.1"
-set_env CC "$LLVM_PREFIX/bin/clang"
-set_env CXX "$LLVM_PREFIX/bin/clang++"
-set_env AR "$LLVM_PREFIX/bin/llvm-ar"
+	set_env WEBKIT_DIR $(pwd)/deps/WebKit
+	set_env WEBKIT_RELEASE_TYPE release
+
+	local LLVM_PREFIX_0="$BREW_DEPS_DIR_0/llvm@13/13.0.1"
+
+	set_env LLVM_PREFIX $LLVM_PREFIX_0
+	set_env CC "$LLVM_PREFIX_0/bin/clang"
+	set_env CXX "$LLVM_PREFIX_0/bin/clang++"
+	set_env AR "$LLVM_PREFIX_0/bin/llvm-ar"
+}
+
