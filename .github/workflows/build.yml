@@ -67,13 +67,17 @@ jobs:
         run: brew install ninja
 
       # TODO(sno2): implement caching
-      - name: Install WebKit Dependencies (Linux)
+      - name: Install WebKit Dependencies (linux)
         if: matrix.os == 'ubuntu-latest'
-        run: sudo bash ./scripts/install-webkit-deps.sh
+        run: sudo bash ./scripts/install-webkit-deps-linux.sh
 
-      - name: Build WebKit (Linux)
+      - name: Build WebKit (linux)
         if: matrix.os == 'ubuntu-latest'
         run: sudo bash ./scripts/build-webkit-linux.sh
+
+      - name: Build WebKit (macOS)
+        if: matrix.os == 'macOS-latest'
+        run: sudo bash ./scripts/build-webkit-macos.sh
 
       - name: Install Rust
         uses: hecrj/setup-rust-action@v1
