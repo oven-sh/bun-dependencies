@@ -26,8 +26,6 @@ else
 	MARCH_NATIVE = -march=native -mtune=native
 endif
 
-AR=
-
 BUN_OR_NODE = $(shell which bun || which node)
 
 CXX_VERSION=c++2a
@@ -94,15 +92,9 @@ LIBTOOL=libtoolize
 
 ifeq ($(OS_NAME),darwin)
 LIBTOOL=glibtoolize
-LLVM_PREFIX=$BREW_DEPS_DIR/llvm@13/13.0.1
 BITCODE_OR_SECTIONS=-fembed-bitcode
 endif
 
-ifeq ($(OS_NAME),linux)
-LLVM_PREFIX=$BREW_DEPS_DIR/llvm@13/13.0.1
-endif
-
-AR=$(LLVM_PREFIX)/bin/llvm-ar
 LLVM_INCLUDE_DIRS=$(LLVM_PREFIX)/include
 CLANG_INCLUDE_DIRS=$(LLVM_PREFIX)/include
 LLD_INCLUDE_DIRS=$(LLVM_PREFIX)/include

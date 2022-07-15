@@ -17,5 +17,7 @@ fi
 set_env WEBKIT_DIR $(pwd)/deps/WebKit
 set_env WEBKIT_RELEASE_TYPE release
 
-set_env CC "$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang"
-set_env CXX "$BREW_DEPS_DIR/llvm@13/13.0.1/bin/clang++"
+set_env LLVM_PREFIX "$BREW_DEPS_DIR/llvm@13/13.0.1"
+set_env CC "$LLVM_PREFIX/bin/clang"
+set_env CXX "$LLVM_PREFIX/bin/clang++"
+set_env AR "$LLVM_PREFIX/bin/llvm-ar"
