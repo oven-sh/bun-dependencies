@@ -23,7 +23,7 @@ fi
 
 CFLAGS="$CFLAGS -ffat-lto-objects" && \
 CXXFLAGS="$CXXFLAGS -ffat-lto-objects" && \
-	cmake --build $WEBKIT_DIR --config $WEBKIT_RELEASE_TYPE -- "jsc" -j$(nproc)
+	cmake --build $WEBKIT_DIR --config $WEBKIT_RELEASE_TYPE -- "jsc" -j$(sysctl -n hw.logicalcpu)
 
 if [ $? -ne 0 ] ; then
 	printf "Failed to build WebKit.\n"
