@@ -39,8 +39,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: $BREW_DEPS_DIR
-          key: cache-dependencies-all
-          restore-keys: cache-dependencies
+          key: ${{ runner.os }}-cache-dependencies-all
+          restore-keys: ${{ runner.os }}-cache-dependencies
 
       - name: Link brew libraries
         if: steps.cache.outputs.cache-hit == 'true'
