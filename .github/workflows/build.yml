@@ -36,9 +36,11 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: $BREW_DEPS_DIR
-          key: cache-dependencies-all
-          restore-keys: cache-dependencies
+          path: |
+            ${{ env.BREW_DEPS_DIR }}
+            ${{ env.WEBKIT_DIR }}
+          key: ${{ runner.os }}-cache-dependencies-all
+          restore-keys: ${{ runner.os }}-cache-dependencies
 
       - name: Link brew libraries
         if: steps.cache.outputs.cache-hit == 'true'
@@ -72,11 +74,11 @@ jobs:
         run: sudo bash ./scripts/install-webkit-deps-linux.sh
 
       - name: Build WebKit (linux)
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && steps.cache.outputs.cache-hit != 'true'
         run: sudo bash ./scripts/build-webkit-linux.sh
 
       - name: Build WebKit (macOS)
-        if: matrix.os == 'macOS-latest'
+        if: matrix.os == 'macOS-latest' && steps.cache.outputs.cache-hit != 'true'
         run: sudo bash ./scripts/build-webkit-macos.sh
 
       - name: Install Rust
