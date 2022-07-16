@@ -78,7 +78,7 @@ jobs:
         run: sudo bash ./scripts/build-webkit-linux.sh
 
       - name: Build WebKit (macOS)
-        if: matrix.os == 'macOS-latest'
+        if: matrix.os == 'macOS-latest' && steps.cache.outputs.cache-hit != 'true'
         run: sudo bash ./scripts/build-webkit-macos.sh
 
       - name: Install Rust
