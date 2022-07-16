@@ -34,6 +34,9 @@ jobs:
         run: |
           source ./scripts/setup-env.sh
           echo "action_state=yellow" >> $GITHUB_ENV
+
+      - name: test
+        run: |
           echo $BREW_DEPS_DIR
           echo ${{ env.BREW_DEPS_DIR }}
           echo $action_state
