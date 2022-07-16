@@ -1,4 +1,5 @@
 set_env () {
+	echo "$1=$2"
 	if [ "$GH_ACTIONS" == true ] ; then
 		echo "$1=$2" >> $GITHUB_ENV
 	else
