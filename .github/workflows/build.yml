@@ -63,8 +63,13 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install ninja
 
-      - name: Build Zig Fork
-        run: sudo bash ./scripts/build-zig.sh
+      - name: Install Rust
+        uses: hecrj/setup-rust-action@v1
+        with:
+          rust-version: "1.62.0"
+
+      - name: Make deps
+        run: ./scripts/make-deps.sh
 
       # TODO(sno2): implement caching
       - name: Install WebKit Dependencies (linux)
@@ -78,11 +83,3 @@ jobs:
       - name: Build WebKit (macOS)
         if: matrix.os == 'macOS-latest' && steps.cache.outputs.cache-hit != 'true'
         run: sudo bash ./scripts/build-webkit-macos.sh
-
-      - name: Install Rust
-        uses: hecrj/setup-rust-action@v1
-        with:
-          rust-version: "1.62.0"
-
-      - name: Make deps
-        run: ./scripts/make-deps.sh
