@@ -1,9 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/hyro/workspace/xHyroM/Makefile/bun-dependencies'
- 
-make: *** No rule to make target 'echo', needed by 'llvm-install'.
-make: *** No rule to make target '"/home/hyro/linuxbrew/.linuxbrew/opt/llvm@13/bin"', needed by 'llvm-install'.
-make: *** No rule to make target '>>', needed by 'llvm-install'.
-
-make: Leaving directory '/home/hyro/workspace/xHyroM/Makefile/bun-dependencies'
- 
