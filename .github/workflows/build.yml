@@ -26,8 +26,8 @@ jobs:
     steps:
       - name: Checkout repository and submodules
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
+#        with:
+#          submodules: recursive
 
       - name: Set Environment Variables (1)
         run: |
