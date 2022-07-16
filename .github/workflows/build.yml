@@ -33,8 +33,11 @@ jobs:
       - name: Set Environment Variables (1)
         run: |
           source ./scripts/setup-env.sh
+          echo "action_state=yellow" >> $GITHUB_ENV
           echo $BREW_DEPS_DIR
           echo ${{ env.BREW_DEPS_DIR }}
+          echo $action_state
+          echo ${{ env.action_state }}
           echo "done"
 
       - name: Cache dependencies
