@@ -3,3 +3,4 @@ deps/*.o
 /bun-webkit
 zig-cache
 zig-out
+.vscode/
