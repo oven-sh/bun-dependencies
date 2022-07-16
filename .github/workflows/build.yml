@@ -33,6 +33,7 @@ jobs:
       - name: Set Environment Variables (1)
         run: |
           sudo bash ./scripts/setup-env.sh
+          source ./scripts/setup-env.sh
           echo $BREW_DEPS_DIR
           echo "done"
 
