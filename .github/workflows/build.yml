@@ -33,6 +33,7 @@ jobs:
         run: |
           sudo bash ./scripts/setup-env.sh
           echo $BREW_DEPS_DIR
+          echo "done"
 
       - name: Cache dependencies
         id: cache

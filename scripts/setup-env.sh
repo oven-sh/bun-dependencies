@@ -1,7 +1,4 @@
 set_env () {
-	echo "$GH_ACTIONS"
-	echo "$1"
-	echo "$2"
 	if [ "$GH_ACTIONS" == true ] ; then
 		echo "$1=$2" >> $GITHUB_ENV
 	else
@@ -20,7 +17,7 @@ main () {
 		BREW_DEPS_DIR_0="/usr/local/Cellar"
 	fi
 
-	set_env BREW_DEPS_DIR=BREW_DEPS_DIR_0
+	set_env BREW_DEPS_DIR $BREW_DEPS_DIR_0
 
 	set_env WEBKIT_DIR $(pwd)/deps/WebKit
 	set_env WEBKIT_RELEASE_TYPE release
