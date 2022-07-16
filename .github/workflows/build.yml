@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build_x64:
     name: ${{ matrix.kind }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 90
@@ -32,6 +32,11 @@ jobs:
       - name: Set Environment Variables (1)
         run: source ./scripts/setup-env.sh
 
+      - name: Create Package Directory
+        run: |
+          mkdir -p $BUN_PKG_INCLUDE;
+	        mkdir -p $BUN_PKG_LIB
+
       - name: Cache dependencies
         id: cache
         uses: actions/cache@v3
@@ -48,7 +53,7 @@ jobs:
 
       - name: Install LLVM
         if: steps.cache.outputs.cache-hit != 'true'
-        run: brew install llvm@13 ncurses s3cmd
+        run: brew install llvm@13 ncurses s3cmd automake
       
       # TODO(sno2): find a better way to do this to override old versions set
       - name: Set Environment Variables (2)

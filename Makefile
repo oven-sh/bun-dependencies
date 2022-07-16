@@ -76,7 +76,11 @@ ifeq ($(CPUS)$(OS_NAME),linux)
   CPUS=$(nproc)
 endif
 
+CPUS ?= $(shell nproc)
 USER ?= $(echo $USER)
+BUN_PKG?=$(REPO_ROOT)/pkg
+BUN_PKG_INCLUDE?=$(BUN_PKG)/include
+BUN_PKG_LIB?=$(BUN_PKG)/lib
 
 BUN_RELEASE_DIR ?= $(shell pwd)/../bun-release
 
@@ -144,7 +148,6 @@ ZLIB_LIB_DIR ?= $(BUN_DEPS_DIR)/zlib
 JSC_FILES := $(JSC_LIB)/libJavaScriptCore.a $(JSC_LIB)/libWTF.a  $(JSC_LIB)/libbmalloc.a $(JSC_LIB)/libLowLevelInterpreterLib.a
 JSC_FILES_DEBUG := $(JSC_LIB_DEBUG)/libJavaScriptCore.a $(JSC_LIB_DEBUG)/libWTF.a  $(JSC_LIB_DEBUG)/libbmalloc.a $(JSC_LIB_DEBUG)/libLowLevelInterpreterLib.a
 
-
 ENABLE_MIMALLOC ?= 1
 
 # https://github.com/microsoft/mimalloc/issues/512
@@ -153,13 +156,13 @@ _MIMALLOC_FILE = libmimalloc.o
 _MIMALLOC_INPUT_PATH = CMakeFiles/mimalloc-obj.dir/src/static.c.o
 _MIMALLOC_DEBUG_FILE = libmimalloc-debug.a
 _MIMALLOC_OBJECT_FILE = 1
-_MIMALLOC_LINK = $(BUN_DEPS_OUT_DIR)/$(MIMALLOC_FILE)
+_MIMALLOC_LINK = $(BUN_PKG_LIB)/$(MIMALLOC_FILE)
 DEFAULT_LINKER_FLAGS =
 
 JSC_BUILD_STEPS :=
 ifeq ($(OS_NAME),linux)
 	JSC_BUILD_STEPS += jsc-build-linux
-	_MIMALLOC_LINK = $(BUN_DEPS_OUT_DIR)/$(MIMALLOC_FILE)
+	_MIMALLOC_LINK = $(BUN_PKG_LIB)/$(MIMALLOC_FILE)
 DEFAULT_LINKER_FLAGS= -pthread -ldl 
 endif
 ifeq ($(OS_NAME),darwin)
@@ -242,7 +245,7 @@ INCLUDE_DIRS := $(UWS_INCLUDE_DIR) -I$(BUN_DEPS_DIR)/mimalloc/include -Isrc/napi
 
 ifeq ($(OS_NAME),linux)
 	INCLUDE_DIRS += $(LINUX_INCLUDE_DIRS)
-	SQLITE_OBJECT = $(realpath $(BUN_DEPS_OUT_DIR))/sqlite3.o
+	SQLITE_OBJECT = $(realpath $(BUN_PKG_LIB))/sqlite3.o
 endif
 
 ifeq ($(OS_NAME),darwin)
@@ -326,8 +329,8 @@ ifeq ($(OS_NAME), darwin)
 endif
 
 ARCHIVE_FILES_WITHOUT_LIBCRYPTO = \
-		$(BUN_DEPS_OUT_DIR)/picohttpparser.o \
-		-L$(BUN_DEPS_OUT_DIR) \
+		$(BUN_PKG_LIB)/picohttpparser.o \
+		-L$(BUN_PKG_LIB) \
 		-llolhtml \
 		-lz \
 		-larchive \
@@ -339,9 +342,9 @@ ARCHIVE_FILES_WITHOUT_LIBCRYPTO = \
 ARCHIVE_FILES = $(ARCHIVE_FILES_WITHOUT_LIBCRYPTO) -lcrypto
 
 ifeq ($(OS_NAME), darwin)
-	ARCHIVE_FILES += $(wildcard $(BUN_DEPS_DIR)/uws/uSockets/*.bc) $(BUN_DEPS_OUT_DIR)/libuwsockets.o
+	ARCHIVE_FILES += $(wildcard $(BUN_DEPS_DIR)/uws/uSockets/*.bc) $(BUN_PKG_LIB)/libuwsockets.o
 else
-	ARCHIVE_FILES += -lusockets $(BUN_DEPS_OUT_DIR)/libuwsockets.o
+	ARCHIVE_FILES += -lusockets $(BUN_PKG_LIB)/libuwsockets.o
 endif
 
 STATIC_MUSL_FLAG ?= 
@@ -364,7 +367,7 @@ PLATFORM_LINKER_FLAGS = $(BUN_CFLAGS) \
 		-Wl,--allow-multiple-definition \
 		-rdynamic
 
-ARCHIVE_FILES_WITHOUT_LIBCRYPTO += $(BUN_DEPS_OUT_DIR)/libbacktrace.a
+ARCHIVE_FILES_WITHOUT_LIBCRYPTO += $(BUN_PKG_LIB)/libbacktrace.a
 endif
 
 
@@ -389,7 +392,7 @@ extract-webkit-linux-binaries:
 		make webkit-copy
 
 webkit-copy:
-	cp bun-webkit/lib/* $(BUN_DEPS_OUT_DIR)
+	cp bun-webkit/lib/* $(BUN_PKG_LIB)
 
 ZIG_FORK_SCRIPT=
 
@@ -411,7 +414,7 @@ base64:
 	cd $(BUN_DEPS_DIR)/base64 && \
 	   $(CC) $(EMIT_LLVM_FOR_RELEASE) $(BUN_CFLAGS) $(OPTIMIZATION_LEVEL) $(BASE64_FLAGS) -g -fPIC -c *.c -I$(SRC_DIR)/base64  && \
 	   $(CXX) $(EMIT_LLVM_FOR_RELEASE) $(CXXFLAGS) $(BUN_CFLAGS) $(BASE64_FLAGS) -c neonbase64.cc -g -fPIC  && \
-	   $(AR) rcvs $(BUN_DEPS_OUT_DIR)/libbase64.a ./*.o
+	   $(AR) rcvs $(BUN_PKG_LIB)/libbase64.a ./*.o
 
 # Prevent dependency on libtcc1 so it doesn't do filesystem lookups
 TINYCC_CFLAGS= -DTCC_LIBTCC1=\"\0\"
@@ -420,7 +423,7 @@ tinycc:
 	cd $(TINYCC_DIR) && \
 		sudo AR=$(AR) CC=$(CC) CFLAGS='$(CFLAGS) $(TINYCC_CFLAGS) $(MACOS_MIN_FLAG)' ./configure --enable-static --cc=$(CC) --ar=$(AR) --config-predefs=yes  && \
 		make -j10 && \
-		cp $(TINYCC_DIR)/*.a $(BUN_DEPS_OUT_DIR)
+		cp $(TINYCC_DIR)/*.a $(BUN_PKG_LIB)
 		
 generate-builtins:
 	rm -f src/bun.js/bindings/*Builtin*.cpp src/bun.js/bindings/*Builtin*.h src/bun.js/bindings/*Builtin*.cpp
@@ -450,7 +453,7 @@ format:
 	$(PRETTIER) --write test/bun.js/solid-dom-fixtures/**/*.js
 
 lolhtml:
-	cd $(BUN_DEPS_DIR)/lol-html/ && cd $(BUN_DEPS_DIR)/lol-html/c-api && cargo build --release && cp target/release/liblolhtml.a $(BUN_DEPS_OUT_DIR)
+	cd $(BUN_DEPS_DIR)/lol-html/ && cd $(BUN_DEPS_DIR)/lol-html/c-api && cargo build --release && cp target/release/liblolhtml.a $(BUN_PKG_LIB)
 
 boringssl-build:
 	cd $(BUN_DEPS_DIR)/boringssl && mkdir -p build && cd build && CFLAGS="$(CFLAGS)" cmake $(CMAKE_FLAGS) -GNinja .. && ninja 
@@ -459,8 +462,8 @@ boringssl-build-debug:
 	cd $(BUN_DEPS_DIR)/boringssl && mkdir -p build && cd build && CFLAGS="$(CFLAGS)" cmake $(CMAKE_FLAGS_WITHOUT_RELEASE) -GNinja .. && ninja 
 
 boringssl-copy:
-	cp $(BUN_DEPS_DIR)/boringssl/build/ssl/libssl.a $(BUN_DEPS_OUT_DIR)/libssl.a
-	cp $(BUN_DEPS_DIR)/boringssl/build/crypto/libcrypto.a $(BUN_DEPS_OUT_DIR)/libcrypto.a
+	cp $(BUN_DEPS_DIR)/boringssl/build/ssl/libssl.a $(BUN_PKG_LIB)/libssl.a
+	cp $(BUN_DEPS_DIR)/boringssl/build/crypto/libcrypto.a $(BUN_PKG_LIB)/libcrypto.a
 
 boringssl: boringssl-build boringssl-copy
 boringssl-debug: boringssl-build-debug boringssl-copy
@@ -472,7 +475,7 @@ libbacktrace:
 	cd $(BUN_DEPS_DIR)/libbacktrace && \
 	CFLAGS="$(CFLAGS)" CC=$(CC) ./configure --disable-shared --enable-static  --with-pic && \
 	make -j$(CPUS) && \
-	cp ./.libs/libbacktrace.a $(BUN_DEPS_OUT_DIR)/libbacktrace.a
+	cp ./.libs/libbacktrace.a $(BUN_PKG_LIB)/libbacktrace.a
 
 
 sqlite:
@@ -485,7 +488,7 @@ libarchive:
 	./build/autogen.sh; \
 	CFLAGS="$(CFLAGS)" CC=$(CC) ./configure --disable-shared --enable-static  --with-pic  --disable-bsdtar   --disable-bsdcat --disable-rpath --enable-posix-regex-lib  --without-xml2  --without-expat --without-openssl  --without-iconv --without-zlib; \
 	make -j${CPUS}; \
-	cp ./.libs/libarchive.a $(BUN_DEPS_OUT_DIR)/libarchive.a;
+	cp ./.libs/libarchive.a $(BUN_PKG_LIB)/libarchive.a;
 
 tgz:
 	$(ZIG) build tgz-obj -Drelease-fast
@@ -501,7 +504,7 @@ vendor: require init-submodules vendor-without-check
 
 zlib: 
 	cd $(BUN_DEPS_DIR)/zlib; CFLAGS="$(CFLAGS)" cmake $(CMAKE_FLAGS) .; CFLAGS="$(CFLAGS)" make;
-	cp $(BUN_DEPS_DIR)/zlib/libz.a $(BUN_DEPS_OUT_DIR)/libz.a
+	cp $(BUN_DEPS_DIR)/zlib/libz.a $(BUN_PKG_LIB)/libz.a
 
 docker-login:
 	docker login ghcr.io --username jarred@jarredsumner.com
@@ -595,10 +598,10 @@ USOCKETS_SRC_DIR = $(BUN_DEPS_DIR)/uws/uSockets/src/
 usockets:
 	cd $(USOCKETS_DIR) && $(CC) -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc $(EMIT_LLVM_FOR_RELEASE)  $(MACOS_MIN_FLAG) -fPIC $(CFLAGS) $(UWS_CC_FLAGS) -save-temps -I$(BUN_DEPS_DIR)/uws/uSockets/src $(UWS_LDFLAGS) -g $(DEFAULT_LINKER_FLAGS) $(PLATFORM_LINKER_FLAGS) $(OPTIMIZATION_LEVEL) -g -c $(wildcard $(USOCKETS_SRC_DIR)/*.c) $(wildcard $(USOCKETS_SRC_DIR)/**/*.c)
 	cd $(USOCKETS_DIR) && $(CXX) -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc $(EMIT_LLVM_FOR_RELEASE) $(MACOS_MIN_FLAG)  -fPIC $(CXXFLAGS) $(UWS_CXX_FLAGS) -save-temps -I$(BUN_DEPS_DIR)/uws/uSockets/src $(UWS_LDFLAGS) -g $(DEFAULT_LINKER_FLAGS) $(PLATFORM_LINKER_FLAGS) $(OPTIMIZATION_LEVEL) -g -c $(wildcard $(USOCKETS_SRC_DIR)/*.cpp) $(wildcard $(USOCKETS_SRC_DIR)/**/*.cpp)
-	cd $(USOCKETS_DIR) && $(AR) rcvs $(BUN_DEPS_OUT_DIR)/libusockets.a *.bc
+	cd $(USOCKETS_DIR) && $(AR) rcvs $(BUN_PKG_LIB)/libusockets.a *.bc
 
 uws:
-	cd $(USOCKETS_DIR) && $(CXX) $(BITCODE_OR_SECTIONS) $(EMIT_LLVM_FOR_RELEASE) -fPIC -I$(BUN_DEPS_DIR)/uws/uSockets/src $(CLANG_FLAGS) $(CFLAGS) $(UWS_CXX_FLAGS) $(UWS_LDFLAGS) $(PLATFORM_LINKER_FLAGS) -c -I$(BUN_DEPS_DIR) $(BUN_DEPS_OUT_DIR)/libusockets.a $(BUN_DEPS_OUT_DIR)/libuwsockets.cpp -o $(BUN_DEPS_OUT_DIR)/libuwsockets.o
+	cd $(USOCKETS_DIR) && $(CXX) $(BITCODE_OR_SECTIONS) $(EMIT_LLVM_FOR_RELEASE) -fPIC -I$(BUN_DEPS_DIR)/uws/uSockets/src $(CLANG_FLAGS) $(CFLAGS) $(UWS_CXX_FLAGS) $(UWS_LDFLAGS) $(PLATFORM_LINKER_FLAGS) -c -I$(BUN_DEPS_DIR) $(BUN_PKG_LIB)/libusockets.a $(BUN_PKG_LIB)/libuwsockets.cpp -o $(BUN_PKG_LIB)/libuwsockets.o
 
 sign-macos-x64: 
 	gon sign.macos-x64.json
@@ -1087,10 +1090,10 @@ jsc-build-mac: jsc-force-fastjit jsc-build-mac-compile jsc-build-mac-copy
 jsc-build-linux: jsc-build-linux-compile-config jsc-build-linux-compile-build jsc-build-mac-copy
 
 jsc-build-mac-copy:
-	cp $(WEBKIT_RELEASE_DIR)/lib/libJavaScriptCore.a $(BUN_DEPS_OUT_DIR)/libJavaScriptCore.a
-	cp $(WEBKIT_RELEASE_DIR)/lib/libLowLevelInterpreterLib.a $(BUN_DEPS_OUT_DIR)/libLowLevelInterpreterLib.a
-	cp $(WEBKIT_RELEASE_DIR)/lib/libWTF.a $(BUN_DEPS_OUT_DIR)/libWTF.a
-	cp $(WEBKIT_RELEASE_DIR)/lib/libbmalloc.a $(BUN_DEPS_OUT_DIR)/libbmalloc.a
+	cp $(WEBKIT_RELEASE_DIR)/lib/libJavaScriptCore.a $(BUN_PKG_LIB)/libJavaScriptCore.a
+	cp $(WEBKIT_RELEASE_DIR)/lib/libLowLevelInterpreterLib.a $(BUN_PKG_LIB)/libLowLevelInterpreterLib.a
+	cp $(WEBKIT_RELEASE_DIR)/lib/libWTF.a $(BUN_PKG_LIB)/libWTF.a
+	cp $(WEBKIT_RELEASE_DIR)/lib/libbmalloc.a $(BUN_PKG_LIB)/libbmalloc.a
 
 clean-jsc:
 	cd src/bun.js/WebKit && rm -rf **/CMakeCache.txt **/CMakeFiles && rm -rf src/bun.js/WebKit/WebKitBuild
@@ -1128,7 +1131,7 @@ mimalloc-debug:
 			-DCMAKE_CXX_FLAGS="$(CFLAGS)" \
 			. \
 			&& make -j $(CPUS); 
-	cp $(BUN_DEPS_DIR)/mimalloc/$(_MIMALLOC_DEBUG_FILE) $(BUN_DEPS_OUT_DIR)/$(MIMALLOC_FILE)
+	cp $(BUN_DEPS_DIR)/mimalloc/$(_MIMALLOC_DEBUG_FILE) $(BUN_PKG_LIB)/$(MIMALLOC_FILE)
 
 
 # mimalloc is built as object files so that it can overload the system malloc on linux
@@ -1151,12 +1154,12 @@ mimalloc:
 			-DCMAKE_C_FLAGS="$(CFLAGS)" \
 			 .\
 			&& make -j $(CPUS); 
-	cp $(BUN_DEPS_DIR)/mimalloc/$(MIMALLOC_INPUT_PATH) $(BUN_DEPS_OUT_DIR)/$(MIMALLOC_FILE)
+	cp $(BUN_DEPS_DIR)/mimalloc/$(MIMALLOC_INPUT_PATH) $(BUN_PKG_LIB)/$(MIMALLOC_FILE)
 
 
 mimalloc-wasm:
 	cd $(BUN_DEPS_DIR)/mimalloc; emcmake cmake -DMI_BUILD_SHARED=OFF -DMI_BUILD_STATIC=ON -DMI_BUILD_TESTS=OFF -DMI_BUILD_OBJECT=ON ${MIMALLOC_OVERRIDE_FLAG} -DMI_USE_CXX=ON .; emmake make; 
-	cp $(BUN_DEPS_DIR)/mimalloc/$(MIMALLOC_INPUT_PATH) $(BUN_DEPS_OUT_DIR)/$(MIMALLOC_FILE).wasm
+	cp $(BUN_DEPS_DIR)/mimalloc/$(MIMALLOC_INPUT_PATH) $(BUN_PKG_LIB)/$(MIMALLOC_FILE).wasm
 
 bun-link-lld-debug:
 	$(CXX) $(BUN_LLD_FLAGS_DEBUG) $(DEBUG_FLAGS) $(SYMBOLS) \
@@ -1293,7 +1296,7 @@ sqlite:
 endif
 
 picohttp:
-	 $(CC) $(CFLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c $(BUN_DEPS_DIR)/picohttpparser/picohttpparser.c -I$(BUN_DEPS_DIR) -o $(BUN_DEPS_OUT_DIR)/picohttpparser.o; cd ../../	
+	 $(CC) $(CFLAGS) $(OPTIMIZATION_LEVEL) -g -fPIC -c $(BUN_DEPS_DIR)/picohttpparser/picohttpparser.c -I$(BUN_DEPS_DIR) -o $(BUN_PKG_LIB)/picohttpparser.o; cd ../../	
 
 analytics:
 	./node_modules/.bin/peechy --schema src/analytics/schema.peechy --zig src/analytics/analytics_schema.zig
