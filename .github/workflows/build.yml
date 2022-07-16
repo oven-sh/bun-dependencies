@@ -74,7 +74,7 @@ jobs:
         run: sudo bash ./scripts/install-webkit-deps-linux.sh
 
       - name: Build WebKit (linux)
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && steps.cache.outputs.cache-hit != 'true'
         run: sudo bash ./scripts/build-webkit-linux.sh
 
       - name: Build WebKit (macOS)
