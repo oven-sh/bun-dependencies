@@ -35,7 +35,7 @@ jobs:
       - name: Create Package Directory
         run: |
           mkdir -p $BUN_PKG_INCLUDE;
-	        mkdir -p $BUN_PKG_LIB
+          mkdir -p $BUN_PKG_LIB
 
       - name: Cache dependencies
         id: cache
