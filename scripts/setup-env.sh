@@ -17,7 +17,7 @@ main () {
 		BREW_DEPS_DIR_0="/usr/local/Cellar"
 	fi
 
-	set_env BREW_DEPS_DIR=BREW_DEPS_DIR_0
+	set_env BREW_DEPS_DIR $BREW_DEPS_DIR_0
 
 	set_env WEBKIT_DIR $(pwd)/deps/WebKit
 	set_env WEBKIT_RELEASE_TYPE release
