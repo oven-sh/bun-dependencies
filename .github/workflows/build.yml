@@ -31,7 +31,7 @@ jobs:
 
       - name: Set Environment Variables (1)
         run: |
-          source ./scripts/setup-env.sh
+          sudo bash ./scripts/setup-env.sh
           echo $BREW_DEPS_DIR
 
       - name: Cache dependencies
