@@ -601,7 +601,7 @@ usockets:
 	cd $(USOCKETS_DIR) && $(AR) rcvs $(BUN_PKG_LIB)/libusockets.a *.bc
 
 uws:
-	cd $(USOCKETS_DIR) && $(CXX) $(BITCODE_OR_SECTIONS) $(EMIT_LLVM_FOR_RELEASE) -fPIC -I$(BUN_DEPS_DIR)/uws/uSockets/src $(CLANG_FLAGS) $(CFLAGS) $(UWS_CXX_FLAGS) $(UWS_LDFLAGS) $(PLATFORM_LINKER_FLAGS) -c -I$(BUN_DEPS_DIR) $(BUN_PKG_LIB)/libusockets.a $(BUN_PKG_LIB)/libuwsockets.cpp -o $(BUN_PKG_LIB)/libuwsockets.o
+	cd $(USOCKETS_DIR) && $(CXX) $(BITCODE_OR_SECTIONS) $(EMIT_LLVM_FOR_RELEASE) -fPIC -I$(BUN_DEPS_DIR)/uws/uSockets/src $(CLANG_FLAGS) $(CFLAGS) $(UWS_CXX_FLAGS) $(UWS_LDFLAGS) $(PLATFORM_LINKER_FLAGS) -c -I$(BUN_DEPS_DIR) $(BUN_PKG_INCLUDE)/libusockets.a $(BUN_PKG_INCLUDE)/libuwsockets.cpp -o $(BUN_PKG_LIB)/libuwsockets.o
 
 sign-macos-x64: 
 	gon sign.macos-x64.json
