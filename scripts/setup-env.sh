@@ -18,6 +18,9 @@ main () {
 	fi
 
 	set_env BREW_DEPS_DIR $BREW_DEPS_DIR_0
+	set_env BUN_PKG $(pwd)/pkg
+	set_env BUN_PKG_INCLUDE $(pwd)/pkg/include
+	set_env BUN_PKG_LIB $(pwd)/pkg/lib
 
 	set_env WEBKIT_DIR $(pwd)/deps/WebKit
 	set_env WEBKIT_RELEASE_TYPE release

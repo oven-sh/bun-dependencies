@@ -4,3 +4,11 @@ deps/*.o
 zig-cache
 zig-out
 .vscode/
+
+/pkg/lib/*
+/pkg/include/*
+
+!/pkg/include/_libusockets.h
+!/pkg/include/libuwsockets.cpp
+!/pkg/include/picohttpparser.c
+!/pkg/include/picohttpparser.h
