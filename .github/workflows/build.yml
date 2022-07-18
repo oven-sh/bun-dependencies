@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches: ["master"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 90
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-18.04, macOS-10.14]
 
     env:
       GH_ACTIONS: true
@@ -54,7 +54,7 @@ jobs:
       - name: Install LLVM
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install llvm@13 ncurses s3cmd automake
-      
+
       # TODO(sno2): find a better way to do this to override old versions set
       - name: Set Environment Variables (2)
         run: source ./scripts/setup-env.sh
@@ -73,13 +73,13 @@ jobs:
 
       # TODO(sno2): implement caching
       - name: Install WebKit Dependencies (linux)
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-18.04'
         run: sudo bash ./scripts/install-webkit-deps-linux.sh
 
       - name: Build WebKit (linux)
-        if: matrix.os == 'ubuntu-latest' && steps.cache.outputs.cache-hit != 'true'
+        if: matrix.os == 'ubuntu-18.04' && steps.cache.outputs.cache-hit != 'true'
         run: sudo bash ./scripts/build-webkit-linux.sh
 
       - name: Build WebKit (macOS)
-        if: matrix.os == 'macOS-latest' && steps.cache.outputs.cache-hit != 'true'
+        if: matrix.os == 'macOS-10.14' && steps.cache.outputs.cache-hit != 'true'
         run: sudo bash ./scripts/build-webkit-macos.sh
